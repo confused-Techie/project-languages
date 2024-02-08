@@ -42,15 +42,29 @@ async function identifyFiles(root) {
     languageObj[langItem.name].percentage = (
       languageObj[langItem.name].files.length / globalList.length
     ) * 100;
-    
+
   }
 
   return languageObj;
 }
 
 function handleFile(file, pathArray, filename, immediateReturn) {
+  const ignoredNames = atom.config.get("core.ignoredNames");
+
+  const shouldIgnore = pathArray.filter(ele => ignoredNames.includes(ele)).length > 0;
+
+  if (shouldIgnore) {
+    // If this file path is on the list of atom ignored names
+    // we will respect that and ignore it too
+    return;
+  }
+
   const parsed = path.parse(file);
-  const ext = parsed.ext ?? parsed.name;
+  let ext = parsed.ext;
+
+  if (ext.length < 1) {
+    ext = parsed.name;
+  }
 
   // Here we will just add data to the globalList without caring at all what we know
   globalList.push({

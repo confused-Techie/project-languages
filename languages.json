@@ -10,5 +10,17 @@
   ".less": {
     "name": "Less",
     "color": "#1d365d"
+  },
+  ".json": {
+    "name": "JSON",
+    "color": "#292929"
+  },
+  ".md": {
+    "name": "Markdown",
+    "color": "#083fa1"
+  },
+  ".gitattributes": {
+    "name": "Git Attributes",
+    "color": "#F44D27"
   }
 }
