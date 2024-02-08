@@ -1,0 +1,14 @@
+{
+  "..OTHER": {
+    "name": "Other",
+    "color": "#ededed"
+  },
+  ".js": {
+    "name": "JavaScript",
+    "color": "#f1e05a"
+  },
+  ".less": {
+    "name": "Less",
+    "color": "#1d365d"
+  }
+}
