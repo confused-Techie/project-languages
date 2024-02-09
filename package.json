@@ -15,5 +15,12 @@
         "^1.0.0": "consumeStatusBar"
       }
     }
+  },
+  "configSchema": {
+    "showFileNames": {
+      "description": "Show file names on language summary list.",
+      "type": "boolean",
+      "default": true
+    }
   }
 }

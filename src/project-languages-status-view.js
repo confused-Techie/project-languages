@@ -1,5 +1,7 @@
 const { Disposable } = require("atom");
+const { performance } = require("perf_hooks");
 const identifyFiles = require("./identify-files.js");
+const projectLanguagesToolTipView = require("./project-languages-tooltip-view.js");
 
 module.exports =
 class ProjectLanguagesStatusView {
@@ -33,12 +35,10 @@ class ProjectLanguagesStatusView {
   }
 
   attach() {
-    console.log("Project Languages: attached");
     this.tile = this.statusBar.addRightTile({ priority: 11, item: this.element });
   }
 
   subscribe() {
-    console.log("Project Languages: subscribed");
     if (this.subscription) {
       this.subscription.dispose();
     }
@@ -47,6 +47,7 @@ class ProjectLanguagesStatusView {
   }
 
   async update(events) {
+    const startTime = performance.now();
     // We don't care about modified events
     if (events && events[0].action === "modified") {
       return;
@@ -61,14 +62,8 @@ class ProjectLanguagesStatusView {
     // TODO we will just work with whatever the first returned path is for now
 
     let languages = await identifyFiles(dir);
-    console.log(languages);
-
-    console.log("Project Languages: updated");
 
     atom.views.updateDocument(() => {
-      let tooltipText = "This project has ";
-      let tooltipLangs = [];
-
       const langContainer = document.createElement("span");
       langContainer.classList.add("list");
 
@@ -80,7 +75,6 @@ class ProjectLanguagesStatusView {
         langSpan.style.width = `${languages[lang].percentage}%`;
         langContainer.appendChild(langSpan);
 
-        tooltipLangs.push(`${Math.round(languages[lang].percentage)}% ${languages[lang].name}`);
       }
 
       this.languageList.appendChild(langContainer);
@@ -89,12 +83,13 @@ class ProjectLanguagesStatusView {
         this.tooltip.dispose();
       }
 
-      tooltipText += tooltipLangs.join(", ");
-      tooltipText = tooltipText.replace(/,([^,]*)$/, " and$1");
       this.tooltip = atom.tooltips.add(this.element, {
-        title: tooltipText
+        item: projectLanguagesToolTipView(languages)
       });
 
     });
+
+    const endTime = performance.now();
+    console.log(`Project-Languages: Updated in ${endTime - startTime}ms`);
   }
 }

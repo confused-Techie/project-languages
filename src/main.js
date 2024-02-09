@@ -3,9 +3,7 @@ const ProjectLanguagesStatusView = require("./project-languages-status-view.js")
 let statusView = null;
 
 module.exports = {
-  activate: () => {
-    console.log("Project Languages Activated!");
-  },
+  activate: () => {},
 
   deactivate: () => {
     if (statusView) {
